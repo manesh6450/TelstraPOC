@@ -1,6 +1,7 @@
 package com.wipro.architectureexample.viewmodel;
 
 import com.wipro.architectureexample.model.NoteList;
+import com.wipro.architectureexample.view.IUpdateListener;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

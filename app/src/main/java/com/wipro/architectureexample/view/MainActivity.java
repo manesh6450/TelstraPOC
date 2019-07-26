@@ -19,7 +19,6 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ApiInterface apiInterface;
     private NoteAdaptor adapter;
     private RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-
+        setupNetworkClient();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -44,23 +43,27 @@ public class MainActivity extends AppCompatActivity {
         fetchData();
     }
 
+    private void setupNetworkClient(){
+        ApiClient.setupNetworkClient();
+        ApiClient.setUIListener(listener);
+    }
+
+    private IUpdateListener listener = new IUpdateListener() {
+        @Override
+        public void onDataReceive(Response<NoteList> response) {
+            String toolbarTitle = response.body().getMainTitle();
+            getSupportActionBar().setTitle(toolbarTitle);
+            adapter = new NoteAdaptor(response.body().getNotes());
+            recyclerView.setAdapter(adapter);
+        }
+
+        @Override
+        public void onFailure(Throwable t) {
+            Log.d("onFailure", t.getMessage());
+        }
+    };
+
     private void fetchData() {
-        apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-        Call<NoteList> call = apiInterface.getData();
-
-        call.enqueue(new Callback<NoteList>() {
-            @Override
-            public void onResponse(Call<NoteList> call, Response<NoteList> response) {
-                String toolbarTitle = response.body().getMainTitle();
-                getSupportActionBar().setTitle(toolbarTitle);
-                adapter = new NoteAdaptor(response.body().getNotes());
-                recyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<NoteList> call, Throwable t) {
-                Log.d("onFailure", t.getMessage());
-            }
-        });
+        ApiClient.getData();
     }
 }
