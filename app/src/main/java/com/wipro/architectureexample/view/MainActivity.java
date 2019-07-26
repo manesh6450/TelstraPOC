@@ -8,13 +8,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.wipro.architectureexample.viewmodel.ApiClient;
-import com.wipro.architectureexample.viewmodel.ApiInterface;
 import com.wipro.architectureexample.R;
 import com.wipro.architectureexample.model.NoteList;
+import com.wipro.architectureexample.viewmodel.ApiClient;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
