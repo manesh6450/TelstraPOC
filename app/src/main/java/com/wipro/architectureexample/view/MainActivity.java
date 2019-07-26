@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.wipro.architectureexample.viewmodel.ApiClient;
 import com.wipro.architectureexample.viewmodel.ApiInterface;
@@ -21,17 +21,30 @@ public class MainActivity extends AppCompatActivity {
 
     private ApiInterface apiInterface;
     private NoteAdaptor adapter;
+    private RecyclerView recyclerView;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.simpleSwipeRefreshLayout);
+        recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                fetchData();
+            }
+        });
+        fetchData();
+    }
 
+    private void fetchData() {
         apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
         Call<NoteList> call = apiInterface.getData();
 
