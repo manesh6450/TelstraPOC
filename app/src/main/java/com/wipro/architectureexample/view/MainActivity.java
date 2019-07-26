@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<NoteList>() {
             @Override
             public void onResponse(Call<NoteList> call, Response<NoteList> response) {
-                String MainTitle = response.body().getMainTitle();
-                getSupportActionBar().setTitle(MainTitle);
+                String toolbarTitle = response.body().getMainTitle();
+                getSupportActionBar().setTitle(toolbarTitle);
                 adapter = new NoteAdaptor(response.body().getNotes());
                 recyclerView.setAdapter(adapter);
             }
