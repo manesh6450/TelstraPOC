@@ -8,6 +8,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -15,7 +16,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.wipro.architectureexample.R;
 import com.wipro.architectureexample.model.NoteList;
-import com.wipro.architectureexample.viewmodel.ApiClient;
+import com.wipro.architectureexample.ApiClient;
+import com.wipro.architectureexample.viewmodel.NoteViewModel;
 
 import retrofit2.Response;
 
@@ -25,18 +27,21 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     CoordinatorLayout coordinatorLayout;
+    private NoteViewModel noteViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         swipeRefreshLayout = findViewById(R.id.simpleSwipeRefreshLayout);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        setupNetworkClient();
+        noteViewModel.setupNetworkClient(listener);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -51,11 +56,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         fetchData();
-    }
-
-    private void setupNetworkClient() {
-        ApiClient.setupNetworkClient();
-        ApiClient.setUIListener(listener);
     }
 
     private IUpdateListener listener = new IUpdateListener() {
@@ -74,17 +74,16 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void fetchData() {
-        if(isNetworkConnected()) {
+        if (isNetworkConnected()) {
             ApiClient.getData();
-        }
-        else{
+        } else {
             showSnackBar();
         }
     }
 
     private void showSnackBar() {
         Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, "Interrupted Connection", Snackbar.LENGTH_LONG)
+                .make(coordinatorLayout, this.getString(R.string.interrupted_connection), Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.snackbar_retry), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

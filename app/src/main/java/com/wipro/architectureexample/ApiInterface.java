@@ -1,4 +1,4 @@
-package com.wipro.architectureexample.viewmodel;
+package com.wipro.architectureexample;
 
 import com.wipro.architectureexample.model.NoteList;
 import com.wipro.architectureexample.view.IUpdateListener;
