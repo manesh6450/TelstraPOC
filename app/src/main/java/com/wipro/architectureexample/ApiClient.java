@@ -15,8 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_URL= "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/";
-    public static Retrofit retrofit = null;
+    public static final String BASE_URL = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/";
+    private static Retrofit retrofit = null;
     private static ApiInterface apiInterface;
     private static IUpdateListener uiListener;
 
@@ -24,8 +24,9 @@ public class ApiClient {
     private ApiClient() {
     }
 
-    public static Retrofit getRetrofit(Context mContext){
-        if(null == retrofit){
+    public static Retrofit getRetrofit(Context mContext) {
+
+        if (null == retrofit) {
 
             int cacheSize = 10 * 1024 * 1024;
             Cache cache = new Cache(mContext.getCacheDir(), cacheSize);
