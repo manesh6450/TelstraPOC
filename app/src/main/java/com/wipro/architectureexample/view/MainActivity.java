@@ -1,13 +1,18 @@
 package com.wipro.architectureexample.view;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.wipro.architectureexample.R;
 import com.wipro.architectureexample.model.NoteList;
 import com.wipro.architectureexample.viewmodel.ApiClient;
@@ -19,13 +24,15 @@ public class MainActivity extends AppCompatActivity {
     private NoteAdaptor adapter;
     private RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.simpleSwipeRefreshLayout);
+        coordinatorLayout = findViewById(R.id.coordinator_layout);
+        swipeRefreshLayout = findViewById(R.id.simpleSwipeRefreshLayout);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -40,7 +47,13 @@ public class MainActivity extends AppCompatActivity {
         fetchData();
     }
 
-    private void setupNetworkClient(){
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchData();
+    }
+
+    private void setupNetworkClient() {
         ApiClient.setupNetworkClient();
         ApiClient.setUIListener(listener);
     }
@@ -61,6 +74,28 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void fetchData() {
-        ApiClient.getData();
+        if(isNetworkConnected()) {
+            ApiClient.getData();
+        }
+        else{
+            showSnackBar();
+        }
+    }
+
+    private void showSnackBar() {
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, "Interrupted Connection", Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.snackbar_retry), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        fetchData();
+                    }
+                });
+        snackbar.show();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ArchitectureExample</string>
+    <string name="snackbar_retry">RETRY</string>
 </resources>
