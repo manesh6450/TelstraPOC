@@ -1,8 +1,12 @@
 package com.wipro.architectureexample;
 
+import android.content.Context;
+
 import com.wipro.architectureexample.model.NoteList;
 import com.wipro.architectureexample.view.IUpdateListener;
 
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,19 +24,27 @@ public class ApiClient {
     private ApiClient() {
     }
 
-    public static Retrofit getRetrofit(){
+    public static Retrofit getRetrofit(Context mContext){
         if(null == retrofit){
+
+            int cacheSize = 10 * 1024 * 1024;
+            Cache cache = new Cache(mContext.getCacheDir(), cacheSize);
+
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .cache(cache)
+                    .build();
+
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
+                    .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
         return retrofit;
     }
 
-    public static void setupNetworkClient() {
-        apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-
+    public static void setupNetworkClient(Context mContext) {
+        apiInterface = ApiClient.getRetrofit(mContext).create(ApiInterface.class);
     }
 
     public static void setUIListener(IUpdateListener listener) {

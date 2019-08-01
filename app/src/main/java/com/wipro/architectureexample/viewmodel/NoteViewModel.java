@@ -15,7 +15,7 @@ public class NoteViewModel extends AndroidViewModel {
     }
 
     public void setupNetworkClient(IUpdateListener listener) {
-        ApiClient.setupNetworkClient();
+        ApiClient.setupNetworkClient(getApplication().getApplicationContext());
         ApiClient.setUIListener(listener);
     }
 }
