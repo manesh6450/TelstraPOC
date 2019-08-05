@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.wipro.telstrapoc.ApiClient;
 import com.wipro.telstrapoc.R;
 import com.wipro.telstrapoc.model.NoteList;
-import com.wipro.telstrapoc.ApiClient;
 import com.wipro.telstrapoc.viewmodel.NoteViewModel;
 
 import retrofit2.Response;
@@ -74,9 +74,8 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void fetchData() {
-        if (isNetworkConnected()) {
-            ApiClient.getData();
-        } else {
+        ApiClient.getData();
+        if (!isNetworkConnected()) {
             showSnackBar();
         }
     }
