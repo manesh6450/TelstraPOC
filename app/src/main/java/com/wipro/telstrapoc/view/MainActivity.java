@@ -1,4 +1,4 @@
-package com.wipro.architectureexample.view;
+package com.wipro.telstrapoc.view;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.wipro.architectureexample.R;
-import com.wipro.architectureexample.model.NoteList;
-import com.wipro.architectureexample.ApiClient;
-import com.wipro.architectureexample.viewmodel.NoteViewModel;
+import com.wipro.telstrapoc.R;
+import com.wipro.telstrapoc.model.NoteList;
+import com.wipro.telstrapoc.ApiClient;
+import com.wipro.telstrapoc.viewmodel.NoteViewModel;
 
 import retrofit2.Response;
 

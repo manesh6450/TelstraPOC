@@ -1,9 +1,9 @@
-package com.wipro.architectureexample;
+package com.wipro.telstrapoc;
 
 import android.content.Context;
 
-import com.wipro.architectureexample.model.NoteList;
-import com.wipro.architectureexample.view.IUpdateListener;
+import com.wipro.telstrapoc.model.NoteList;
+import com.wipro.telstrapoc.view.IUpdateListener;
 
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;

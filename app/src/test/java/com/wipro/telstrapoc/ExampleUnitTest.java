@@ -1,4 +1,4 @@
-package com.wipro.architectureexample;
+package com.wipro.telstrapoc;
 
 import org.junit.Test;
 

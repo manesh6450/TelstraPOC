@@ -1,12 +1,12 @@
-package com.wipro.architectureexample.viewmodel;
+package com.wipro.telstrapoc.viewmodel;
 
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.wipro.architectureexample.ApiClient;
-import com.wipro.architectureexample.view.IUpdateListener;
+import com.wipro.telstrapoc.ApiClient;
+import com.wipro.telstrapoc.view.IUpdateListener;
 
 public class NoteViewModel extends AndroidViewModel {
 

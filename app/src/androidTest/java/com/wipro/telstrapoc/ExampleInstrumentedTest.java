@@ -1,4 +1,4 @@
-package com.wipro.architectureexample;
+package com.wipro.telstrapoc;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.wipro.architectureexample", appContext.getPackageName());
+        assertEquals("com.wipro.telstrapoc", appContext.getPackageName());
     }
 }

@@ -1,6 +1,6 @@
-package com.wipro.architectureexample.view;
+package com.wipro.telstrapoc.view;
 
-import com.wipro.architectureexample.model.NoteList;
+import com.wipro.telstrapoc.model.NoteList;
 
 import retrofit2.Response;
 

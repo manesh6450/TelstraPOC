@@ -1,4 +1,4 @@
-package com.wipro.architectureexample.model;
+package com.wipro.telstrapoc.model;
 
 import com.google.gson.annotations.SerializedName;
 

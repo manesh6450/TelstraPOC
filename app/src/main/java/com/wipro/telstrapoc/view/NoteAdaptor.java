@@ -1,4 +1,4 @@
-package com.wipro.architectureexample.view;
+package com.wipro.telstrapoc.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-import com.wipro.architectureexample.R;
-import com.wipro.architectureexample.model.Note;
+import com.wipro.telstrapoc.R;
+import com.wipro.telstrapoc.model.Note;
 
 import java.util.List;
 
