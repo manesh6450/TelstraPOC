@@ -2,4 +2,5 @@
     <string name="app_name">ArchitectureExample</string>
     <string name="snackbar_retry">RETRY</string>
     <string name="interrupted_connection">Interrupted Connection</string>
+    <string name="failed_response">Failed !!!</string>
 </resources>

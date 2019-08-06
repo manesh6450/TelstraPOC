@@ -1,20 +1,17 @@
 package com.wipro.telstrapoc.view;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.wipro.telstrapoc.ApiClient;
 import com.wipro.telstrapoc.R;
 import com.wipro.telstrapoc.model.NoteList;
 import com.wipro.telstrapoc.viewmodel.NoteViewModel;
@@ -41,59 +38,48 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        noteViewModel.setupNetworkClient(listener);
+        noteViewModel.setupNetworkClient();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-                fetchData();
+                noteViewModel.fetchData();
             }
         });
-        fetchData();
+        noteViewModel.fetchData();
+        noteViewModel.getSnackBarMessage().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                showSnackBar(s);
+            }
+        });
+        noteViewModel.getDataResponse().observe(this, new Observer<Response<NoteList>>() {
+            @Override
+            public void onChanged(Response<NoteList> noteListResponse) {
+                String toolbarTitle = noteListResponse.body().getMainTitle();
+                getSupportActionBar().setTitle(toolbarTitle);
+                adapter = new NoteAdaptor(noteListResponse.body().getNotes());
+                recyclerView.setAdapter(adapter);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        fetchData();
+        noteViewModel.fetchData();
     }
 
-    private IUpdateListener listener = new IUpdateListener() {
-        @Override
-        public void onDataReceive(Response<NoteList> response) {
-            String toolbarTitle = response.body().getMainTitle();
-            getSupportActionBar().setTitle(toolbarTitle);
-            adapter = new NoteAdaptor(response.body().getNotes());
-            recyclerView.setAdapter(adapter);
-        }
-
-        @Override
-        public void onFailure(Throwable t) {
-            Log.d("onFailure", t.getMessage());
-        }
-    };
-
-    private void fetchData() {
-        ApiClient.getData();
-        if (!isNetworkConnected()) {
-            showSnackBar();
-        }
-    }
-
-    private void showSnackBar() {
+    private void showSnackBar(String message) {
         Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, this.getString(R.string.interrupted_connection), Snackbar.LENGTH_LONG)
+                .make(coordinatorLayout, message, Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.snackbar_retry), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        fetchData();
+                        noteViewModel.fetchData();
                     }
                 });
         snackbar.show();
     }
 
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null;
-    }
 }

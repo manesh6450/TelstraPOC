@@ -1,4 +1,4 @@
-package com.wipro.telstrapoc;
+package com.wipro.telstrapoc.network;
 
 import com.wipro.telstrapoc.model.NoteList;
 
